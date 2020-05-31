@@ -1,0 +1,26 @@
+import 'package:compound/constants/route_names.dart';
+import 'package:compound/locator.dart';
+import 'package:compound/services/authentication_service.dart';
+import 'package:compound/services/navigation_service.dart';
+import 'package:compound/viewmodels/base_model.dart';
+import 'file:///C:/Users/thiri/Documents/flutter/second_app/tmp/locator.dart';
+import 'package:second_app/services/push_notification_service.dart';
+
+class StartUpViewModel extends BaseModel {
+  final AuthenticationService _authenticationService =
+      locator<AuthenticationService>();
+  final NavigationService _navigationService = locator<NavigationService>();
+  final PushNotificationService _pushNotificationService = locator<PushNotificationService>();
+
+
+  Future handleStartUpLogic() async {
+    await _pushNotificationService.initialise();
+    var hasLoggedInUser = await _authenticationService.isUserLoggedIn();
+
+    if (hasLoggedInUser) {
+      _navigationService.navigateTo(HomeViewRoute);
+    } else {
+      _navigationService.navigateTo(LoginViewRoute);
+    }
+  }
+}
